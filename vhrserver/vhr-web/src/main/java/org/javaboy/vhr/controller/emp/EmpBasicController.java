@@ -1,6 +1,8 @@
 package org.javaboy.vhr.controller.emp;
 
+import org.javaboy.vhr.annotations.Log;
 import org.javaboy.vhr.bean.*;
+import org.javaboy.vhr.bean.enums.BusinessType;
 import org.javaboy.vhr.service.*;
 import org.javaboy.vhr.utils.POIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,7 @@ public class EmpBasicController {
 
 
     @GetMapping("/")
+    @Log(title = "获取用户",businessType = BusinessType.GET)
     public RespPageBean getEmployeeByPage(@RequestParam(defaultValue = "1") Integer page,
                                           @RequestParam(defaultValue = "10") Integer size,
                                           Employee employee,
@@ -58,6 +61,7 @@ public class EmpBasicController {
     }
 
     @PostMapping("/")
+    @Log(title = "添加用户",businessType = BusinessType.INSERT)
     public RespBean addEmp(@RequestBody Employee employee){
         if (employeeService.addEmp(employee) == 1){
             return RespBean.ok("添加成功！");
@@ -100,6 +104,7 @@ public class EmpBasicController {
     }
 
     @PutMapping("/")
+    @Log(title = "更新用户",businessType = BusinessType.UPDATE)
     public RespBean updateEmp(@RequestBody Employee employee){
         if (employeeService.updateEmp(employee) == 1){
             return RespBean.ok("更新成功！");
@@ -108,6 +113,7 @@ public class EmpBasicController {
     }
 
     @DeleteMapping("/{id}")
+    @Log(title = "删除用户",businessType = BusinessType.DELETE)
     public RespBean deleteEmpById(@PathVariable Integer id ){
         if (employeeService.deleteEmpById(id) == 1){
             return RespBean.ok("删除成功！");
@@ -116,6 +122,7 @@ public class EmpBasicController {
     }
 
     @GetMapping("/export")
+    @Log(title = "导出用户",businessType = BusinessType.EXPORT)
     public ResponseEntity<byte[]> exportData(){
         List<Employee> data = (List<Employee>) employeeService.getEmployeeByPage(null, null, new Employee(),null).getData();
         return POIUtils.employee2Excel(data);
@@ -123,6 +130,7 @@ public class EmpBasicController {
 
 
     @PostMapping("/import")
+    @Log(title = "导入用户",businessType = BusinessType.IMPORT)
     public RespBean importData(MultipartFile file) throws IOException {
         List<Employee> list = POIUtils.excel2Employee(file, nationService.getAllNations(), politicsstatusService.getAllPoliticsstatus(), departmentService.getAllDepartmentsWithOutChildren(), positionService.getAllPositions(), jobLevelService.getAllJobLevels());
 

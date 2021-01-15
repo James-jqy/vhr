@@ -1,6 +1,7 @@
 package org.javaboy.vhr.utils;
 
 import org.javaboy.vhr.bean.Hr;
+// service 模块不能导入web模块
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 

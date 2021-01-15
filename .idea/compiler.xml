@@ -6,16 +6,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="vhr-common" />
+        <module name="vhr-commons" />
         <module name="vhr-web" />
         <module name="vhr-service" />
-        <module name="vhr-mapper" />
-        <module name="vhr-model" />
         <module name="mailserver" />
+        <module name="vhr-model" />
+        <module name="vhr-mapper" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="11">
       <module name="mailserver" target="1.8" />
       <module name="vhr" target="1.8" />
+      <module name="vhr-common" target="1.8" />
+      <module name="vhr-commons" target="1.8" />
       <module name="vhr-mapper" target="1.8" />
       <module name="vhr-model" target="1.8" />
       <module name="vhr-service" target="1.8" />
@@ -26,6 +30,8 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="mailserver" options="-parameters" />
+      <module name="vhr-common" options="-parameters" />
+      <module name="vhr-commons" options="-parameters" />
       <module name="vhr-mapper" options="-parameters" />
       <module name="vhr-model" options="-parameters" />
       <module name="vhr-service" options="-parameters" />

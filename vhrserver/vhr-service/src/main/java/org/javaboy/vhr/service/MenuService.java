@@ -5,6 +5,7 @@ import org.javaboy.vhr.bean.Menu;
 import org.javaboy.vhr.mapper.MenuMapper;
 import org.javaboy.vhr.mapper.MenuRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.List;
  * @Created by Jieqiyue
  */
 @Service
+@CacheConfig(cacheNames = "menus_cache")
 public class MenuService {
 
     @Autowired
@@ -33,6 +35,7 @@ public class MenuService {
     }
 
 //    @Cacheable  最好将这个方法加上缓存，因为每次请求都要去判断权限是否满足，都需要调用这个方法。
+    @Cacheable
     public List<Menu> getAllMenusWithRole() {
         return menuMapper.getAllMenusWithRole();
     }

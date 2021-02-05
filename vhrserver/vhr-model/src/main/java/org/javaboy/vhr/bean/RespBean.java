@@ -1,5 +1,8 @@
 package org.javaboy.vhr.bean;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Classname RespBean
  * @Description TODO
@@ -10,6 +13,15 @@ public class RespBean {
     private Integer status;
     private String msg;
     private Object obj;
+    private Map<String, Object> map = new HashMap<>();
+
+    public Map<String, Object> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, Object> map) {
+        this.map = map;
+    }
 
     public static RespBean build(){
         return new RespBean();

@@ -30,7 +30,7 @@ public class MailSendTask {
     @Autowired
     EmployeeService employeeService;
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0/60 * * * * ?")
     public void mailResendTask(){
         List<MailSendLog> logs = mailSendLogService.getMailSendLogsByStatus();
         logs.forEach(mailSendLog -> {

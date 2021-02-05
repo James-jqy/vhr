@@ -1,6 +1,8 @@
 package org.javaboy.vhr.service;
 
 
+import com.github.pagehelper.PageHelper;
+import org.apache.ibatis.jdbc.SQL;
 import org.javaboy.vhr.bean.*;
 import org.javaboy.vhr.mapper.EmpSalaryMapper;
 import org.javaboy.vhr.mapper.EmployeeMapper;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,6 +50,11 @@ public class EmployeeService {
     SimpleDateFormat mouthFormat = new SimpleDateFormat("MM");
     DecimalFormat decimalFormat = new DecimalFormat("##.00");
 
+    public List<Employee> getEmpByPageUseHelper(Integer page , Integer size){
+        PageHelper.startPage(page, size);
+        List<Employee> data = employeeMapper.getEmpByPageUseHelper(page,size);
+        return data;
+    }
     // 获取employee，并且进行分页操作。
     public RespPageBean getEmployeeByPage(Integer page, Integer size, Employee employee,Date[] beginDateScope) {
         if (page != null && size != null){
@@ -75,6 +83,7 @@ public class EmployeeService {
         employee.setContractTerm(Double.parseDouble(decimalFormat.format(((v - v1)*12 + (v2 - v3))/12)));
         int i = employeeMapper.insertSelective(employee);
 
+        // i如果是1，就代表插入员工记录成功。
         if (i == 1){
             // 通过主键回填找到被插入的那条员工记录。
             Employee emp = employeeMapper.getEmployeeById(employee.getId());
@@ -91,7 +100,6 @@ public class EmployeeService {
             mailSendLogService.insert(msdLog);
             // 在这里做邮件发送的工作。
             rabbitTemplate.convertAndSend(MailConstants.MAIL_EXCHANGE_NAME,MailConstants.MAIL_ROUTING_KEY_NAME,emp,new CorrelationData(msgId));
-            rabbitTemplate.convertAndSend(MailConstants.MAIL_EXCHANGE_NAME,MailConstants.MAIL_ROUTING_KEY_NAME,emp,new CorrelationData(msgId));
         }
 
         return i;
@@ -102,10 +110,12 @@ public class EmployeeService {
         return employeeMapper.getMaxWordID();
     }
 
-    @Transactional
-    public int deleteEmpById(Integer id) {
-        empSalaryMapper.deleteEmpSalaryByEmpId(id);
-        return employeeMapper.deleteByPrimaryKey(id);
+    @Transactional()
+    public int deleteEmpById(Integer id)  {
+        int i = empSalaryMapper.deleteEmpSalaryByEmpId(id);
+        int i1 = employeeMapper.deleteByPrimaryKey(id);
+
+        return ((i == i1)&&i==1)?1:0;
     }
 
     public int updateEmp(Employee employee) {

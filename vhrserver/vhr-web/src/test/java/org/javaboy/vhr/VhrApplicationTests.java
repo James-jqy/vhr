@@ -6,6 +6,7 @@ import org.javaboy.vhr.bean.Hr;
 import org.javaboy.vhr.bean.Role;
 import org.javaboy.vhr.controller.system.basic.PermissController;
 import org.javaboy.vhr.mapper.EmployeeMapper;
+import org.javaboy.vhr.service.EmployeeService;
 import org.javaboy.vhr.service.HrService;
 import org.javaboy.vhr.service.MenuService;
 import org.junit.jupiter.api.Test;
@@ -23,13 +24,12 @@ class VhrApplicationTests {
     @Autowired
     EmployeeMapper employeeMapper;
 
+    @Autowired
+    EmployeeService employeeService;
     @Test
     public void test(){
-        List<Employee> list = employeeMapper.getAllEmpByPageWithSalary(1,2);
-        List<Employee> allEmpByPageWithSalary = employeeMapper.getAllEmpByPageWithSalary(0, 10);
-        for (Employee employee : allEmpByPageWithSalary) {
-            System.out.println(employee.getSalary());
-        }
+        List<Employee> empByPageUseHelper = employeeService.getEmpByPageUseHelper(11, 10);
+        empByPageUseHelper.forEach(employee -> System.out.println(employee) );
     }
 
 }

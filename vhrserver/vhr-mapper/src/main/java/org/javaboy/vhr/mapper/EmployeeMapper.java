@@ -1,7 +1,6 @@
 package org.javaboy.vhr.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.javaboy.vhr.bean.Department;
 import org.javaboy.vhr.bean.Employee;
 
 import java.util.Date;
@@ -39,4 +38,7 @@ public interface EmployeeMapper {
     List<Employee> getAllEmpByPageWithSalary(@Param("page") Integer page,@Param("size") Integer size);
 
     int updateEmployeeSalaryById(Integer eid, Integer sid);
+
+    // 这个方法就是去玩了一下pageHelper，实际项目中没有用这个插件
+    List<Employee> getEmpByPageUseHelper(@Param("page") Integer page,@Param("size") Integer size);
 }

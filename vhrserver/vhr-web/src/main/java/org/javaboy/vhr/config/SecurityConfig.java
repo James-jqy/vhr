@@ -5,6 +5,7 @@ import org.javaboy.vhr.bean.Hr;
 import org.javaboy.vhr.bean.RespBean;
 import org.javaboy.vhr.service.HrService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.*;
@@ -69,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 返回给前端的hr对象要擦除密码字段。也可以在hr类的这个属性上加上@jsonignore，但是这样从json反序列化会hr对象也会忽略密码，可能会有问题。
                 hr.setPassword(null);
                 RespBean ok = RespBean.ok("登陆成功！", hr);
+
                 String hrstring = new ObjectMapper().writeValueAsString(ok);
                 writer.write(hrstring);
 
@@ -114,6 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(hrService);
@@ -121,7 +124,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/login","/css/**","/js/**","/verifyCode","/favicon.ico","/fonts/**","/img/**","/index.html");
+        web.ignoring().antMatchers("/login","/css/**","/js/**","/verifyCode","/favicon.ico","/fonts/**","/img/**","/index.html","/druid/*");
     }
 
     @Override

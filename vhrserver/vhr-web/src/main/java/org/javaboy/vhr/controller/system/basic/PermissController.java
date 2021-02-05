@@ -1,5 +1,6 @@
 package org.javaboy.vhr.controller.system.basic;
 
+import org.javaboy.vhr.annotations.RepeatSubmit;
 import org.javaboy.vhr.bean.Menu;
 import org.javaboy.vhr.bean.RespBean;
 import org.javaboy.vhr.bean.Role;
@@ -49,11 +50,12 @@ public class PermissController {
     }
 
     @PostMapping("/")
+    @RepeatSubmit
     public RespBean addRole(@RequestBody Role role){
         if (roleService.addRole(role) == 1){
-            return RespBean.ok("更新成功！");
+            return RespBean.ok("添加成功！");
         }
-        return RespBean.error("更新失败！");
+        return RespBean.error("添加失败！");
     }
 
     @DeleteMapping("/role/{rid}")

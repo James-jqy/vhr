@@ -28,4 +28,9 @@ public class GlobalExceptionHandler {
         System.out.println(e.getMessage());
         return RespBean.error("数据库异常，操作失败！");
     }
+
+    @ExceptionHandler(RepartSubmitException.class)
+    public RespBean idempotentException(RepartSubmitException e) {
+        return RespBean.error("请勿重复提交表单！");
+    }
 }

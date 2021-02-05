@@ -38,30 +38,30 @@
     beginContract, endContract, workAge
   </sql>
 
-  <resultMap id="AllEmployeeInfo" type="org.javaboy.vhr.bean.Employee" extends="BaseResultMap">
+  <resultMap id="AllEmployeeInfo" type="Employee" extends="BaseResultMap">
     <association property="nation" javaType="org.javaboy.vhr.bean.Nation">
       <id column="nid" property="id"></id>
       <result column="nname" property="name"></result>
     </association>
-    <association property="politicsstatus" javaType="org.javaboy.vhr.bean.Politicsstatus">
+    <association property="politicsstatus" javaType="Politicsstatus">
       <id column="pid" property="id"></id>
       <result column="pname" property="name"></result>
     </association>
-    <association property="department" javaType="org.javaboy.vhr.bean.Department">
+    <association property="department" javaType="Department">
       <id column="did" property="id"></id>
       <result column="dname" property="name"></result>
     </association>
-    <association property="jobLevel" javaType="org.javaboy.vhr.bean.JobLevel">
+    <association property="jobLevel" javaType="JobLevel">
       <id column="jid" property="id"></id>
       <result column="jname" property="name"></result>
     </association>
-    <association property="position" javaType="org.javaboy.vhr.bean.Position">
+    <association property="position" javaType="Position">
       <id column="posid" property="id"></id>
       <result column="posname" property="name"></result>
     </association>
   </resultMap>
 
-  <resultMap id="EmployeeWithSalary" type="org.javaboy.vhr.bean.Employee" extends="BaseResultMap">
+  <resultMap id="EmployeeWithSalary" type="Employee" extends="BaseResultMap">
     <association property="salary" javaType="org.javaboy.vhr.bean.Salary">
       <id column="sid" property="id" jdbcType="INTEGER" />
       <result column="sbasicSalary" property="basicSalary" jdbcType="INTEGER" />
@@ -109,6 +109,13 @@
     and e.posId = pos.id
     and e.id = #{id}
 </select>
+  <select id="getEmpByPageUseHelper" resultMap="AllEmployeeInfo">
+    select e.*,p.id as pid,p.`name` as pname,n.id as nid,n.`name` as nname,d.id as did,d.`name` as dname,
+    j.id as jid,j.`name` as jname,pos.id as posid, pos.`name` as posname
+    from employee e,nation n,politicsstatus p,department d ,joblevel j,position pos
+    where e.nationId = n.id and e.politicId = p.id and e.departmentId = d.id and e.jobLevelId = j.id
+    and e.posId = pos.id
+  </select>
   <select id="getEmployeeByPage" resultMap="AllEmployeeInfo">
     select e.*,p.id as pid,p.`name` as pname,n.id as nid,n.`name` as nname,d.id as did,d.`name` as dname,
     j.id as jid,j.`name` as jname,pos.id as posid, pos.`name` as posname
@@ -238,7 +245,7 @@
       #{beginContract,jdbcType=DATE}, #{endContract,jdbcType=DATE}, #{workAge,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="org.javaboy.vhr.bean.Employee" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="Employee" useGeneratedKeys="true" keyProperty="id">
     insert into employee
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -7,12 +7,15 @@ import org.javaboy.vhr.service.*;
 import org.javaboy.vhr.utils.POIUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -114,7 +117,7 @@ public class EmpBasicController {
 
     @DeleteMapping("/{id}")
     @Log(title = "删除用户",businessType = BusinessType.DELETE)
-    public RespBean deleteEmpById(@PathVariable Integer id ){
+    public RespBean deleteEmpById(@PathVariable Integer id )  {
         if (employeeService.deleteEmpById(id) == 1){
             return RespBean.ok("删除成功！");
         }

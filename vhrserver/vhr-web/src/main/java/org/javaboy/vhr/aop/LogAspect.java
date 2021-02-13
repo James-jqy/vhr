@@ -18,6 +18,8 @@ import org.javaboy.vhr.utils.ServletUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -32,6 +34,9 @@ import java.lang.reflect.Method;
 @Component
 public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+    @Qualifier("taskPool")
+    @Autowired
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
     SysOperLogService sysOperLogService;
@@ -99,11 +104,11 @@ public class LogAspect {
             // 处理设置注解上的参数
             getControllerMethodDescription(joinPoint, controllerLog, operLog);
             // 保存数据库
-//            AsyncManager.me().execute(AsyncFactory.recordOper(operLog));
-            System.out.println(operLog);
-            Integer integer = sysOperLogService.insertOper(operLog);
+            //AsyncManager.me().execute(AsyncFactory.recordOper(operLog));
 
-
+            taskExecutor.execute(()->{
+                Integer integer = sysOperLogService.insertOper(operLog);
+            });
         }
         catch (Exception exp)
         {
